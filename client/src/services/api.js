@@ -3,28 +3,28 @@ import axios from 'axios';
 const API_URL = process.env.REACT_APP_API_URL; // Update with your backend URL
 
 export const getProducts = async () => {
-  const response = await axios.get(`${API_URL}/products`);
+  const response = await axios.get(`${API_URL}/api/products`);
   return response.data;
 };
 
 export const addProduct = async (product) => {
-  const response = await axios.post(`${API_URL}/products`, product);
+  const response = await axios.post(`${API_URL}/api/products`, product);
   return response.data;
 };
 
 export const updateProduct = async (id, updatedProduct) => {
-  const response = await axios.patch(`${API_URL}/products/${id}`, updatedProduct);
+  const response = await axios.patch(`${API_URL}/api/products/${id}`, updatedProduct);
   return response.data;
 };
 
 export const deleteProduct = async (id) => {
-  const response = await axios.delete(`${API_URL}/products/${id}`);
+  const response = await axios.delete(`${API_URL}/api/products/${id}`);
   return response.data;
 };
 
 // Add an order
 export const addOrder = async (orderData) => {
-    const response = await axios.post(`${API_URL}/orders`, orderData, {
+    const response = await axios.post(`${API_URL}/api/orders`, orderData, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -34,6 +34,6 @@ export const addOrder = async (orderData) => {
   
   // Fetch all orders
   export const getOrders = async () => {
-    const response = await axios.get(`${API_URL}/orders`);
+    const response = await axios.get(`${API_URL}/api/orders`);
     return response.data;
   };
