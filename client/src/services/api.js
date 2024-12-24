@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api'; // Update with your backend URL
+const API_URL = process.env.REACT_APP_API_URL; // Update with your backend URL
 
 export const getProducts = async () => {
   const response = await axios.get(`${API_URL}/products`);
