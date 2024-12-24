@@ -1,5 +1,7 @@
 import { airtableClient } from '../utils/airtableClient';
 
+const validStatuses = ['Pending', 'Confirm', 'Shipped', 'Cancelled'];
+
 // Fetch all products
 export const fetchProducts = async () => {
   try {
@@ -52,16 +54,39 @@ export const fetchOrders = async () => {
       throw new Error(`Failed to fetch orders: ${error.response?.data || error.message}`);
     }
   };
-  
-  // Create a new order
+
   export const createOrder = async (order: Record<string, any>) => {
     try {
+      const { ProductID, BuyerDetails, Status } = order;
+  
+      // Validate required fields
+      if (!ProductID || !BuyerDetails || !Status) {
+        throw new Error('Missing required fields: ProductID, BuyerDetails, or Status');
+      }
+  
+      // Fetch the product name using ProductID
+      const products = await fetchProducts();
+      const product = products.find((p: any) => p.id === ProductID);
+  
+      if (!product) {
+        throw new Error(`Product with ID ${ProductID} not found`);
+      }
+  
+      const ProductName = product.fields.Name; // Extract the product name
+  
+      // Create the order with ProductName included
       const response = await airtableClient.post('/Orders', {
-        fields: order,
+        fields: {
+          ProductID: [ProductID], // Airtable expects an array for linked fields
+          BuyerDetails,
+          Status,
+          ProductName, // Include the product name in the order
+        },
       });
+  
       return response.data;
     } catch (error: any) {
+      console.error('Error creating order:', error.response?.data || error.message);
       throw new Error(`Failed to create order: ${error.response?.data || error.message}`);
     }
   };
-  

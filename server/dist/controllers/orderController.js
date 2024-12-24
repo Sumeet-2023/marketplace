@@ -23,15 +23,19 @@ const getAllOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.getAllOrders = getAllOrders;
-// Add a new order
 const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     try {
+        console.log('Incoming Order:', req.body); // Log the request body
         const newOrder = yield (0, airtableService_1.createOrder)(req.body);
         res.status(201).json(newOrder);
     }
     catch (error) {
-        console.error('Error adding order:', error.message);
-        res.status(500).json({ message: 'Error adding order', error });
+        console.error('Error adding order:', ((_a = error.response) === null || _a === void 0 ? void 0 : _a.data) || error.message); // Improved error logging
+        res.status(500).json({
+            message: 'Error adding order',
+            error: ((_b = error.response) === null || _b === void 0 ? void 0 : _b.data) || error.message,
+        });
     }
 });
 exports.addOrder = addOrder;

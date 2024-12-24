@@ -12,13 +12,16 @@ export const getAllOrders = async (req: Request, res: Response) => {
   }
 };
 
-// Add a new order
 export const addOrder = async (req: Request, res: Response) => {
   try {
+    console.log('Incoming Order:', req.body); // Log the request body
     const newOrder = await createOrder(req.body);
     res.status(201).json(newOrder);
   } catch (error: any) {
-    console.error('Error adding order:', error.message);
-    res.status(500).json({ message: 'Error adding order', error });
+    console.error('Error adding order:', error.response?.data || error.message); // Improved error logging
+    res.status(500).json({
+      message: 'Error adding order',
+      error: error.response?.data || error.message,
+    });
   }
 };

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProduct = exports.updateProduct = exports.addProduct = exports.getAllProducts = void 0;
+exports.getProducts = exports.deleteProduct = exports.updateProduct = exports.addProduct = exports.getAllProducts = void 0;
 const airtableService_1 = require("../services/airtableService");
 // Get all products
 const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -59,3 +59,19 @@ const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.deleteProduct = deleteProduct;
+const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name } = req.query; // Query parameter
+    try {
+        const records = yield (0, airtableService_1.fetchProducts)(); // Explicitly type records
+        // Filter by name
+        const filteredRecords = name
+            ? records.filter((product) => product.fields.Name.toLowerCase().includes(name.toLowerCase()))
+            : records;
+        res.status(200).json(filteredRecords);
+    }
+    catch (error) {
+        console.error('Error fetching products:', error);
+        res.status(500).json({ message: 'Error fetching products' });
+    }
+});
+exports.getProducts = getProducts;
